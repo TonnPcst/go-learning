@@ -1,71 +1,71 @@
-# Lesson 1 — Go and the Go Toolchain
+# ບົດທີ 1 — Go ແລະ Go Toolchain
 
-> Phase 1 · Go Fundamentals
-> Code: [`lesson01/`](../lesson01/)
-> Go version: 1.27.1
+> Phase 1 · ພື້ນຖານ Go
+> ໂຄດ: [`lesson01/`](../lesson01/)
+> ເວີຊັນ Go: 1.27.1
 
 ---
 
-## 1. What Go is
+## 1. Go ແມ່ນຫຍັງ
 
-A compiled, statically typed language created at Google (2009). Design goals:
+Go ເປັນພາສາແບບ compiled ແລະ statically typed ທີ່ Google ສ້າງຂຶ້ນ (ປີ 2009). ເປົ້າໝາຍການອອກແບບ:
 
-- **Simplicity over expressiveness.** About 25 keywords. No classes, inheritance, decorators or exceptions.
-- **Fast compilation.** Large projects build in seconds.
-- **Built-in concurrency.** Goroutines and channels are part of the language.
-- **One way to do things.** `gofmt` has no options, so there are no style debates.
+- **ລຽບງ່າຍ ສຳຄັນກວ່າຂຽນສັ້ນ.** ມີ keyword ພຽງ 25 ຄຳ. ບໍ່ມີ class, inheritance, decorator ຫຼື exception.
+- **Compile ໄວ.** ໂປຣເຈັກໃຫຍ່ build ໄດ້ພາຍໃນບໍ່ເທົ່າໃດວິນາທີ.
+- **Concurrency ມີມາໃນພາສາເລີຍ.** Goroutine ແລະ channel ເປັນສ່ວນໜຶ່ງຂອງພາສາ.
+- **ມີວິທີດຽວໃນການເຮັດ.** `gofmt` ບໍ່ມີ option ໃຫ້ຕັ້ງຄ່າ, ຈຶ່ງບໍ່ຕ້ອງຖຽງກັນເລື່ອງ style.
 
-**Mindset shift from NestJS:** Go deliberately leaves out "magic". There's no DI container, no decorators and no reflection-heavy framework. You write a bit more code, and in exchange any Go codebase shows exactly what it does.
+**ປ່ຽນແນວຄິດຈາກ NestJS:** Go ຕັ້ງໃຈບໍ່ມີ "magic". ບໍ່ມີ DI container, ບໍ່ມີ decorator ແລະ ບໍ່ມີ framework ທີ່ໃຊ້ reflection ຫຼາຍ. ຕ້ອງຂຽນໂຄດຫຼາຍຂຶ້ນໜ້ອຍໜຶ່ງ, ແຕ່ແລກມາກັບໂຄດ Go ທີ່ອ່ານແລ້ວເຫັນເລີຍວ່າມັນເຮັດຫຍັງ.
 
-## 2. Why Go is popular for backend work
+## 2. ເປັນຫຍັງ Go ຈຶ່ງນິຍົມໃຊ້ເຮັດ backend
 
-- **One static binary.** Deploying is copying a file. No `node_modules`, no runtime to install.
-- **Real parallelism.** One process uses every CPU core.
-- **Low memory and fast startup.** Good for containers, Kubernetes and serverless.
-- **A strong standard library:** `net/http`, `encoding/json`, `database/sql`, `context`, `testing`, `log/slog`.
-- **Cloud-native tools are written in Go:** Docker, Kubernetes, Terraform, Prometheus, etcd.
+- **Static binary ໄຟລ໌ດຽວ.** Deploy ແມ່ນແຄ່ສຳເນົາໄຟລ໌. ບໍ່ມີ `node_modules`, ບໍ່ຕ້ອງຕິດຕັ້ງ runtime.
+- **Parallelism ແທ້.** Process ດຽວໃຊ້ໄດ້ທຸກ core ຂອງ CPU.
+- **ໃຊ້ໜ່ວຍຄວາມຈຳໜ້ອຍ ແລະ ເປີດໄວ.** ເໝາະກັບ container, Kubernetes ແລະ serverless.
+- **Standard library ແຂງແຮງ:** `net/http`, `encoding/json`, `database/sql`, `context`, `testing`, `log/slog`.
+- **ເຄື່ອງມື cloud-native ຂຽນດ້ວຍ Go:** Docker, Kubernetes, Terraform, Prometheus, etcd.
 
-## 3. Go vs Node.js / TypeScript
+## 3. Go ທຽບກັບ Node.js / TypeScript
 
-| Concern | Node.js / TypeScript | Go |
+| ຫົວຂໍ້ | Node.js / TypeScript | Go |
 |---|---|---|
-| Execution | JIT-compiled JS on V8 | Ahead-of-time compiled machine code |
-| Types | Erased at runtime; `any` escape hatch | Enforced at compile time, present at runtime |
-| Concurrency | Single-threaded event loop + `async/await` | Goroutines on all cores; blocking code is normal |
-| Errors | `throw` / `try/catch` | Errors are return values: `val, err := f()` |
-| OOP | Classes, inheritance, decorators | Structs + methods + implicit interfaces |
-| DI | NestJS container, `@Injectable()` | Pass dependencies into constructors yourself |
-| Packages | npm, `package.json`, `node_modules` | Go modules, `go.mod`, global module cache |
-| Format / lint | Prettier + ESLint configs | `gofmt` + `go vet`, built in |
-| Testing | Jest / Vitest (third-party) | `go test` + `testing` package (built in) |
-| Exports | `export` keyword | **Capitalized = exported**, lowercase = package-private |
+| ການ run | JS ທີ່ JIT-compile ເທິງ V8 | Compile ເປັນ machine code ລ່ວງໜ້າ (ahead-of-time) |
+| Type | ຖືກລຶບຖິ້ມຕອນ runtime; ມີ `any` ໃຫ້ຫຼົບ | ກວດຕອນ compile ແລະ ຍັງມີຢູ່ຕອນ runtime |
+| Concurrency | Event loop thread ດຽວ + `async/await` | Goroutine ເທິງທຸກ core; ຂຽນ blocking code ເປັນເລື່ອງປົກກະຕິ |
+| Error | `throw` / `try/catch` | Error ເປັນຄ່າທີ່ return: `val, err := f()` |
+| OOP | Class, inheritance, decorator | Struct + method + interface ແບບ implicit |
+| DI | NestJS container, `@Injectable()` | ສົ່ງ dependency ເຂົ້າ constructor ເອງ |
+| Package | npm, `package.json`, `node_modules` | Go modules, `go.mod`, module cache ລວມ |
+| Format / lint | ຕັ້ງຄ່າ Prettier + ESLint | `gofmt` + `go vet` ມີມາໃນຕົວ |
+| Testing | Jest / Vitest (third-party) | `go test` + package `testing` (ມີມາໃນຕົວ) |
+| Export | Keyword `export` | **ຕົວພິມໃຫຍ່ = export**, ຕົວພິມນ້ອຍ = ໃຊ້ໄດ້ພາຍໃນ package ເທົ່ານັ້ນ |
 
-**The big one:** Node must never block the event loop, so everything is `async`. In Go you write plain blocking code (`resp, err := http.Get(url)`); the runtime parks that goroutine and runs others. There's no function colouring, so `async` doesn't spread through the codebase.
+**ຄວາມແຕກຕ່າງໃຫຍ່ທີ່ສຸດ:** ໃນ Node ຫ້າມ block event loop, ທຸກຢ່າງຈຶ່ງຕ້ອງເປັນ `async`. ໃນ Go ຂຽນ blocking code ທຳມະດາໄດ້ເລີຍ (`resp, err := http.Get(url)`); runtime ຈະພັກ goroutine ນັ້ນໄວ້ ແລ້ວໄປ run goroutine ອື່ນ. ບໍ່ມີບັນຫາ function colouring, ສະນັ້ນ `async` ຈະບໍ່ແຜ່ລາມໄປທົ່ວໂຄດ.
 
-## 4. Go compiler vs Node.js runtime
+## 4. Go compiler ທຽບກັບ Node.js runtime
 
 ```text
 Node:  app.ts ──tsc──► app.js ──(ship with node + node_modules)──► V8 runs/JITs at runtime
 Go:    *.go   ──go build──► ./app   (native machine code, self-contained)
 ```
 
-Node 22.18+/23.6+ can also run `.ts` directly by stripping types, but it's still interpreted and JIT-compiled at runtime.
+Node 22.18+/23.6+ ສາມາດ run ໄຟລ໌ `.ts` ໄດ້ໂດຍກົງດ້ວຍການລຶບ type ອອກ, ແຕ່ກໍຍັງ interpret ແລະ JIT-compile ຕອນ runtime ຄືເກົ່າ.
 
-The Go binary **contains** a small runtime: the garbage collector and the goroutine scheduler. Nothing needs to be installed on the target machine.
+Binary ຂອງ Go **ມີ** runtime ນ້ອຍໆຢູ່ໃນຕົວ: garbage collector ແລະ goroutine scheduler. ເຄື່ອງປາຍທາງບໍ່ຕ້ອງຕິດຕັ້ງຫຍັງເລີຍ.
 
-Cross-compiling for a Linux server from a Mac:
+Cross-compile ໃຫ້ server Linux ຈາກ Mac:
 
 ```bash
 GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o app ./cmd/api
 ```
 
-`CGO_ENABLED=0` produces a fully static binary with no dependency on the system's C library. Cross-compiling already disables cgo by default, but a native build inside a Docker builder image does not, so set it explicitly.
+`CGO_ENABLED=0` ເຮັດໃຫ້ໄດ້ binary ແບບ static ທັງໝົດ, ບໍ່ເພິ່ງ C library ຂອງລະບົບ. ຕອນ cross-compile, cgo ຖືກປິດໂດຍ default ຢູ່ແລ້ວ, ແຕ່ຕອນ build ປົກກະຕິໃນ Docker builder image ມັນບໍ່ຖືກປິດ, ສະນັ້ນໃຫ້ກຳນົດເອງໃຫ້ຊັດເຈນ.
 
-## 5. Project structure: module → package → file
+## 5. ໂຄງສ້າງໂປຣເຈັກ: module → package → file
 
-- **Module:** a versioned unit defined by `go.mod` (roughly a `package.json` project).
-- **Package:** **one directory = one package.** Every file in it declares the same `package xyz`.
-- **File:** files in the same package see each other's identifiers without importing.
+- **Module:** ໜ່ວຍທີ່ມີເວີຊັນ, ກຳນົດໂດຍ `go.mod` (ຄ້າຍກັບໂປຣເຈັກທີ່ມີ `package.json`).
+- **Package:** **ໜຶ່ງໂຟນເດີ = ໜຶ່ງ package.** ທຸກໄຟລ໌ໃນໂຟນເດີຕ້ອງປະກາດ `package xyz` ຊື່ດຽວກັນ.
+- **File:** ໄຟລ໌ໃນ package ດຽວກັນເຫັນຊື່ຂອງກັນ ແລະ ກັນໄດ້ໂດຍບໍ່ຕ້ອງ import.
 
 ```text
 lesson01/
@@ -79,15 +79,15 @@ lesson01/
         └── greet_test.go    ← tests live next to the code
 ```
 
-Conventions:
+ທຳນຽມ:
 
-- **`package main` + `func main()`** marks an executable. Any other package name is a library.
-- **`cmd/<name>/`** holds one directory per binary (later: `cmd/api`, `cmd/worker`).
-- **`internal/`** is enforced by the compiler: only code under the parent of `internal/` can import it. Here the parent is the module root, so other modules can't import `lesson01/internal/greet`.
-- Group packages by **what they do** (`user`, `charger`, `postgres`), not by technical layer (`controllers/`, `services/`, `dtos/`). Don't copy the NestJS layout.
-- **Import path = module path + folder path:** `example.com/lesson01` + `/internal/greet`. The **package name** is the `package` line, and it should match the folder's last part (`greet`). In code you write `greet.Hello`.
+- **`package main` + `func main()`** ໝາຍເຖິງໂປຣແກຣມທີ່ run ໄດ້ (executable). Package ຊື່ອື່ນແມ່ນ library.
+- **`cmd/<name>/`** ໜຶ່ງໂຟນເດີຕໍ່ໜຶ່ງ binary (ຕໍ່ໄປ: `cmd/api`, `cmd/worker`).
+- **`internal/`** compiler ບັງຄັບໃຊ້ແທ້: ມີແຕ່ໂຄດທີ່ຢູ່ພາຍໃຕ້ໂຟນເດີແມ່ຂອງ `internal/` ເທົ່ານັ້ນທີ່ import ໄດ້. ໃນນີ້ໂຟນເດີແມ່ຄື root ຂອງ module, ສະນັ້ນ module ອື່ນ import `lesson01/internal/greet` ບໍ່ໄດ້.
+- ຈັດກຸ່ມ package ຕາມ **ໜ້າທີ່ຂອງມັນ** (`user`, `charger`, `postgres`), ບໍ່ແມ່ນຕາມ layer ທາງເທັກນິກ (`controllers/`, `services/`, `dtos/`). ຢ່າກັອບປີ້ layout ຂອງ NestJS.
+- **Import path = module path + folder path:** `example.com/lesson01` + `/internal/greet`. **ຊື່ package** ແມ່ນຊື່ໃນແຖວ `package`, ແລະ ຄວນກົງກັບສ່ວນສຸດທ້າຍຂອງຊື່ໂຟນເດີ (`greet`). ໃນໂຄດຈະຂຽນເປັນ `greet.Hello`.
 
-## 6. `go.mod` and `go.sum`
+## 6. `go.mod` ແລະ `go.sum`
 
 ```bash
 go mod init example.com/lesson01
@@ -99,23 +99,23 @@ module example.com/lesson01   // import prefix for every package in the module
 go 1.27.1                     // minimum Go version
 ```
 
-After `go get github.com/jackc/pgx/v5`:
+ຫຼັງຈາກ `go get github.com/jackc/pgx/v5`:
 
 ```go
 require github.com/jackc/pgx/v5 v5.7.1
 ```
 
-| File | Purpose | npm analogy |
+| ໄຟລ໌ | ໜ້າທີ່ | ທຽບກັບ npm |
 |---|---|---|
-| `go.mod` | Module path, Go version, **minimum** version of each dependency (no `^` / `~` ranges) | `package.json` |
-| `go.sum` | Cryptographic checksums of downloaded modules; detects tampered or changed code | Nothing exact (closest: the integrity hashes in `package-lock.json`) |
+| `go.mod` | Module path, ເວີຊັນ Go, **ເວີຊັນຕ່ຳສຸດ** ຂອງແຕ່ລະ dependency (ບໍ່ມີ range ແບບ `^` / `~`) | `package.json` |
+| `go.sum` | Checksum ຂອງ module ທີ່ດາວໂຫຼດມາ; ກວດຈັບໂຄດທີ່ຖືກແກ້ໄຂ ຫຼື ປ່ຽນແປງ | ບໍ່ມີອັນທີ່ກົງແທ້ (ໃກ້ທີ່ສຸດ: integrity hash ໃນ `package-lock.json`) |
 
-- Go uses **Minimal Version Selection**: it builds with the minimum versions listed in `go.mod`, so builds are reproducible without a lockfile.
-- **Commit both files.**
-- `go mod tidy` adds missing dependencies and removes unused ones.
-- Imports always use the full module path (`"example.com/lesson01/internal/greet"`). There are no relative imports.
+- Go ໃຊ້ **Minimal Version Selection**: build ດ້ວຍເວີຊັນຕ່ຳສຸດທີ່ຂຽນໄວ້ໃນ `go.mod` ສະເໝີ, ສະນັ້ນ build ຊ້ຳໄດ້ຜົນຄືເກົ່າໂດຍບໍ່ຕ້ອງມີ lockfile.
+- **Commit ທັງສອງໄຟລ໌.**
+- `go mod tidy` ເພີ່ມ dependency ທີ່ຂາດ ແລະ ລຶບອັນທີ່ບໍ່ໃຊ້ອອກ.
+- ການ import ໃຊ້ module path ເຕັມສະເໝີ (`"example.com/lesson01/internal/greet"`). ບໍ່ມີ relative import.
 
-## 7. Commands
+## 7. ຄຳສັ່ງ
 
 ```bash
 go run ./cmd/greeter                  # compile to a temp dir and run
@@ -132,28 +132,28 @@ go env GOOS GOARCH                    # show the target OS/arch (darwin arm64 on
 go version                            # show the installed Go version
 ```
 
-Set your editor to run **gopls / goimports on save**. It adds and removes imports automatically, so you'll rarely see the unused-import error.
+ຕັ້ງ editor ໃຫ້ run **gopls / goimports ຕອນ save**. ມັນຈະເພີ່ມ ແລະ ລຶບ import ໃຫ້ອັດຕະໂນມັດ, ຈຶ່ງບໍ່ຄ່ອຍເຈີ error ເລື່ອງ import ທີ່ບໍ່ໄດ້ໃຊ້.
 
-## Syntax notes
+## ບັນທຶກ syntax
 
-- `func Add(a, b int) int`: the type comes **after** the name; `a, b int` shares one type.
-- **Unused imports and unused local variables are compile errors**, not warnings.
-  - A side-effect-only import uses the blank identifier: `import _ "github.com/lib/pq"`.
-- No semicolons and no parentheses around `if` conditions. Braces are required, and `{` stays on the same line.
-- Tests: file `*_test.go`, function `TestXxx(t *testing.T)`. Use a plain `if` plus `t.Errorf`; there's no `expect()`.
-  - `t.Errorf` marks the test failed and keeps going; `t.Fatalf` stops the test immediately.
-  - Use `%q` in failure messages so empty strings and whitespace are visible.
-- Doc comments start with the identifier name (`// Hello returns ...`) and are prose, not JSDoc `@param` blocks. Cover what it returns and any special cases. A blank `//` line starts a new paragraph; an indented line becomes a code block.
+- `func Add(a, b int) int`: type ຢູ່ **ຫຼັງ** ຊື່; `a, b int` ໃຊ້ type ດຽວກັນ.
+- **Import ທີ່ບໍ່ໄດ້ໃຊ້ ແລະ local variable ທີ່ບໍ່ໄດ້ໃຊ້ ເປັນ compile error**, ບໍ່ແມ່ນ warning.
+  - Import ທີ່ຕ້ອງການພຽງ side effect ໃຫ້ໃຊ້ blank identifier: `import _ "github.com/lib/pq"`.
+- ບໍ່ມີ semicolon ແລະ ບໍ່ມີວົງເລັບອ້ອມເງື່ອນໄຂ `if`. ຕ້ອງມີປີກກາ (braces) ສະເໝີ, ແລະ `{` ຕ້ອງຢູ່ແຖວດຽວກັນ.
+- Test: ໄຟລ໌ `*_test.go`, ຟັງຊັນ `TestXxx(t *testing.T)`. ໃຊ້ `if` ທຳມະດາ + `t.Errorf`; ບໍ່ມີ `expect()`.
+  - `t.Errorf` ໝາຍວ່າ test fail ແຕ່ຍັງເຮັດວຽກຕໍ່; `t.Fatalf` ຢຸດ test ທັນທີ.
+  - ໃຊ້ `%q` ໃນຂໍ້ຄວາມ failure ເພື່ອໃຫ້ເຫັນ string ຫວ່າງ ແລະ ຊ່ອງວ່າງ.
+- Doc comment ເລີ່ມດ້ວຍຊື່ຂອງສິ່ງທີ່ອະທິບາຍ (`// Hello returns ...`) ແລະ ຂຽນເປັນປະໂຫຍກທຳມະດາ, ບໍ່ແມ່ນ block `@param` ແບບ JSDoc. ບອກວ່າມັນ return ຫຍັງ ແລະ ກໍລະນີພິເສດ. ແຖວ `//` ຫວ່າງ = ຂຶ້ນຫຍໍ້ໜ້າໃໝ່; ແຖວທີ່ຫຍໍ້ເຂົ້າ = code block.
 
 ---
 
-## Exercise 1: greeter
+## ແບບຝຶກຫັດ 1: greeter
 
-**Task:** module `example.com/lesson01`, package `internal/greet` with an exported `Hello(name string) string` (`"Hello, <name>!"`, or `"Hello, stranger!"` for an empty name) and an unexported helper, `cmd/greeter/main.go`, and two tests.
+**ໂຈດ:** module `example.com/lesson01`, package `internal/greet` ທີ່ມີ `Hello(name string) string` ແບບ export (`"Hello, <name>!"`, ຫຼື `"Hello, stranger!"` ຖ້າຊື່ຫວ່າງ) ແລະ helper ທີ່ບໍ່ export ໜຶ່ງຕົວ, `cmd/greeter/main.go`, ແລະ test ສອງຕົວ.
 
-**Solution:** see [`lesson01/internal/greet/greet.go`](../lesson01/internal/greet/greet.go). `Hello` delegates to the unexported `displayName`, which trims whitespace and falls back to `"stranger"`.
+**ວິທີແກ້:** ເບິ່ງ [`lesson01/internal/greet/greet.go`](../lesson01/internal/greet/greet.go). `Hello` ສົ່ງຕໍ່ໃຫ້ `displayName` (ບໍ່ export), ເຊິ່ງຕັດຊ່ອງວ່າງອອກ ແລະ ໃຊ້ `"stranger"` ແທນເມື່ອບໍ່ມີຊື່.
 
-**Result** (original run with the first two tests; two whitespace tests were added after review, see Review notes)
+**ຜົນລັບ** (ການ run ຄັ້ງທຳອິດ ທີ່ມີ test ສອງຕົວທຳອິດ; test ເລື່ອງຊ່ອງວ່າງສອງຕົວຖືກເພີ່ມຫຼັງການ review, ເບິ່ງ ບັນທຶກການ review)
 
 ```text
 $ go run ./cmd/greeter
@@ -170,47 +170,126 @@ PASS
 ok      example.com/lesson01/internal/greet
 ```
 
-### Questions and answers
+### ຄຳຖາມ ແລະ ຄຳຕອບ
 
-**A. What happens if `main.go` calls the unexported helper?**
-It doesn't compile: `name displayName not exported by package greet`. A lowercase identifier is visible only inside its own package, and `main` is a different package. Go has no `export` or `private` keyword: the first letter of the name decides, and the compiler enforces it.
+**A. ຈະເກີດຫຍັງຂຶ້ນ ຖ້າ `main.go` ເອີ້ນ helper ທີ່ບໍ່ export?**
+Compile ບໍ່ຜ່ານ: `name displayName not exported by package greet`. ຊື່ທີ່ຂຶ້ນຕົ້ນດ້ວຍຕົວພິມນ້ອຍ ເຫັນໄດ້ສະເພາະພາຍໃນ package ຂອງມັນເອງ, ແລະ `main` ເປັນຄົນລະ package. Go ບໍ່ມີ keyword `export` ຫຼື `private`: ຕົວອັກສອນຕົວທຳອິດຂອງຊື່ເປັນຕົວຕັດສິນ, ແລະ compiler ເປັນຜູ້ບັງຄັບ.
 
-**B. How do you build for a Linux amd64 Kubernetes node? Does the node need Go?**
-`GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o greeter ./cmd/greeter`. The node doesn't need Go. The binary is self-contained and includes the runtime, and `CGO_ENABLED=0` removes the dependency on the system's C library.
+**B. Build ໃຫ້ Kubernetes node ທີ່ເປັນ Linux amd64 ແນວໃດ? Node ຕ້ອງມີ Go ບໍ?**
+`GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o greeter ./cmd/greeter`. Node ບໍ່ຕ້ອງມີ Go. Binary ມີທຸກຢ່າງໃນຕົວລວມທັງ runtime, ແລະ `CGO_ENABLED=0` ຕັດການເພິ່ງ C library ຂອງລະບົບອອກ.
 
-**C. What's the difference between `go.mod` and `go.sum`? Which one is `package-lock.json`?**
-`go.mod` declares the module path, the Go version and the minimum version of each dependency. `go.sum` stores checksums of downloaded modules so changed code is detected. Neither is a true `package-lock.json`. `go.sum` is the closest, as the generated file you commit, but Go doesn't need a lockfile: Minimal Version Selection always uses the minimums in `go.mod`, so builds are already reproducible. Commit both.
+**C. `go.mod` ກັບ `go.sum` ຕ່າງກັນແນວໃດ? ອັນໃດຄື `package-lock.json`?**
+`go.mod` ປະກາດ module path, ເວີຊັນ Go ແລະ ເວີຊັນຕ່ຳສຸດຂອງແຕ່ລະ dependency. `go.sum` ເກັບ checksum ຂອງ module ທີ່ດາວໂຫຼດມາ ເພື່ອກວດຈັບໂຄດທີ່ຖືກປ່ຽນ. ບໍ່ມີອັນໃດເປັນ `package-lock.json` ແທ້. `go.sum` ໃກ້ທີ່ສຸດ ໃນແງ່ທີ່ເປັນໄຟລ໌ທີ່ລະບົບສ້າງໃຫ້ ແລະ ຕ້ອງ commit, ແຕ່ Go ບໍ່ຕ້ອງມີ lockfile: Minimal Version Selection ໃຊ້ເວີຊັນຕ່ຳສຸດໃນ `go.mod` ສະເໝີ, ສະນັ້ນ build ຊ້ຳໄດ້ຜົນຄືເກົ່າຢູ່ແລ້ວ. Commit ທັງສອງໄຟລ໌.
 
-**D. What happens with an unused `fmt` import? How does that differ from TypeScript?**
-It's a compile error (`"fmt" imported and not used`), and the program won't build. In TypeScript an unused import is only an editor or linter warning (an error only with `noUnusedLocals`), and the code still compiles and runs.
+**D. ຈະເກີດຫຍັງຂຶ້ນກັບ import `fmt` ທີ່ບໍ່ໄດ້ໃຊ້? ຕ່າງຈາກ TypeScript ແນວໃດ?**
+ເປັນ compile error (`"fmt" imported and not used`), ແລະ ໂປຣແກຣມ build ບໍ່ໄດ້. ໃນ TypeScript import ທີ່ບໍ່ໄດ້ໃຊ້ເປັນພຽງ warning ຈາກ editor ຫຼື linter (ເປັນ error ກໍຕໍ່ເມື່ອເປີດ `noUnusedLocals`), ແລະ ໂຄດຍັງ compile ແລະ run ໄດ້.
 
-### Common mistakes I hit
+### ຂໍ້ຜິດພາດທີ່ເຄີຍເຈີ
 
-| Error | Cause | Fix |
+| Error | ສາເຫດ | ວິທີແກ້ |
 |---|---|---|
-| `found packages greeter (greet.go) and main (main.go)` | Two package names in one folder | One folder = one package |
-| `import cycle not allowed` | `main.go` imported its own folder | Never import your own package; files in the same package see each other directly |
-| Editor added an alias `greeter "…/internal/greet"` | `package greeter` inside folder `greet/` | Package name should match the folder's last part |
+| `found packages greeter (greet.go) and main (main.go)` | ມີສອງຊື່ package ໃນໂຟນເດີດຽວ | ໜຶ່ງໂຟນເດີ = ໜຶ່ງ package |
+| `import cycle not allowed` | `main.go` import ໂຟນເດີຂອງຕົວເອງ | ຢ່າ import package ຂອງຕົວເອງ; ໄຟລ໌ໃນ package ດຽວກັນເຫັນກັນໄດ້ເລີຍ |
+| Editor ເພີ່ມ alias `greeter "…/internal/greet"` ໃຫ້ | `package greeter` ຢູ່ໃນໂຟນເດີ `greet/` | ຊື່ package ຄວນກົງກັບສ່ວນສຸດທ້າຍຂອງຊື່ໂຟນເດີ |
+| `docs/` ບໍ່ມີຢູ່ໃນ GitHub | Run `git init` ພາຍໃນ `lesson01/` | ຍ້າຍ `.git` ຂຶ້ນໄປ `go-learning/`; git ບັນທຶກເປັນ rename, ສະນັ້ນ history ຍັງຢູ່ຄົບ |
+| Commit binary ຂະໜາດ 2.2 MB ເຂົ້າໄປ | ບໍ່ມີ `.gitignore` ກ່ອນ commit ທຳອິດ | ເພີ່ມ `bin/` ໃນ `.gitignore`, ແລ້ວ `git rm --cached` binary ນັ້ນ |
 
-### Review notes
+### ບັນທຶກການ review
 
-- ✅ Correct layout (`cmd/` + `internal/`). Doc comments start with the identifier name and are written in English and Lao (ENG/LAO paragraphs, separated by a blank `//` line).
-- ✅ `%q` in test failure messages.
-- ✅ Reassigning the parameter (`name = strings.TrimSpace(name)`) is idiomatic: parameters are local variables, so this doesn't affect the caller.
-- ✅ The extra `TrimSpace` behaviour (`"   "` becomes stranger, `"  Ton  "` becomes `"Ton"`) is now tested (`TestHelloWhitespaceName`, `TestHelloTrimsName`). Every branch you write needs a test.
-- ✅ Removed the `Parameters:` / `Returns` blocks (a JSDoc habit). Go doc comments are prose.
-- ⚠️ The four tests each repeat the same `got` / `want` / `if` block. Go's fix is the **table-driven test** (Exercise 1.2).
+- ✅ ໂຄງສ້າງຖືກຕ້ອງ (`cmd/` + `internal/`). Doc comment ເລີ່ມດ້ວຍຊື່ຂອງສິ່ງທີ່ອະທິບາຍ ແລະ ຂຽນເປັນພາສາອັງກິດ ແລະ ລາວ (ຫຍໍ້ໜ້າ ENG/LAO, ຂັ້ນດ້ວຍແຖວ `//` ຫວ່າງ).
+- ✅ ໃຊ້ `%q` ໃນຂໍ້ຄວາມ test failure.
+- ✅ ການ assign ຄ່າໃໝ່ໃຫ້ parameter (`name = strings.TrimSpace(name)`) ເປັນແບບ Go ທີ່ຖືກຕ້ອງ: parameter ເປັນ local variable, ຈຶ່ງບໍ່ກະທົບຜູ້ເອີ້ນ.
+- ✅ ພຶດຕິກຳ `TrimSpace` ທີ່ເພີ່ມມາ (`"   "` ກາຍເປັນ stranger, `"  Ton  "` ກາຍເປັນ `"Ton"`) ມີ test ແລ້ວ (ກໍລະນີ `whitespace only` ແລະ `padded name` ໃນ `TestHello`). ທຸກ branch ທີ່ຂຽນ ຕ້ອງມີ test.
+- ✅ ລຶບ block `Parameters:` / `Returns` ອອກແລ້ວ (ເປັນນິໄສຈາກ JSDoc). Doc comment ຂອງ Go ຂຽນເປັນປະໂຫຍກທຳມະດາ.
+- ✅ Test ສີ່ຕົວເຄີຍຊ້ຳ block `got` / `want` / `if` ແບບດຽວກັນ. ແກ້ແລ້ວໃນແບບຝຶກຫັດ 1.2 ດ້ວຍ **table-driven test** ຕົວດຽວ.
 
 ---
 
-## Exercise 1.2: table-driven tests + CLI args *(in progress)*
+## ແບບຝຶກຫັດ 1.2: table-driven test + CLI argument
 
-1. Replace the four tests with one table-driven `TestHello` using `t.Run` subtests. Cover `"Ton"`, `""`, `"   "` and `"  Ton  "`.
-2. `go run ./cmd/greeter Alice` greets Alice; with no argument it greets the stranger. Use `os.Args` and check the length before indexing.
+1. ແທນ test ສີ່ຕົວດ້ວຍ `TestHello` ແບບ table-driven ຕົວດຽວ ທີ່ໃຊ້ subtest `t.Run`. ໃຫ້ຄອບຄຸມ `"Ton"`, `""`, `"   "` ແລະ `"  Ton  "`.
+2. `go run ./cmd/greeter Alice` ທັກທາຍ Alice; ຖ້າບໍ່ມີ argument ໃຫ້ທັກທາຍ stranger. ໃຊ້ `os.Args` ແລະ ກວດຄວາມຍາວກ່ອນເຂົ້າເຖິງ index.
 3. Run:
    - `go test -v ./...`
    - `go test -run 'TestHello/<empty-case-name>' -v ./internal/greet`
    - `go test -cover ./...`
    - `GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o bin/greeter-linux ./cmd/greeter && file bin/greeter-linux`
-   - Add `bin/` to `.gitignore` first, so build output never gets committed.
-4. What is `os.Args[0]`, and what happens if you access `os.Args[1]` without checking the length? How does that compare with `process.argv[2]` in Node?
+   - ເພີ່ມ `bin/` ໃນ `.gitignore` ກ່ອນ, ເພື່ອບໍ່ໃຫ້ຜົນການ build ຖືກ commit.
+4. `os.Args[0]` ແມ່ນຫຍັງ, ແລະ ຈະເກີດຫຍັງຂຶ້ນຖ້າເຂົ້າເຖິງ `os.Args[1]` ໂດຍບໍ່ກວດຄວາມຍາວ? ທຽບກັບ `process.argv[2]` ໃນ Node ແນວໃດ?
+
+**ວິທີແກ້**
+
+- [`greet_test.go`](../lesson01/internal/greet/greet_test.go): `TestHello` ຕົວດຽວ ທີ່ມີ slice ຂອງ anonymous struct (`name`, `input`, `want`) ແລະ subtest `t.Run` ສຳລັບແຕ່ລະກໍລະນີ. ເພີ່ມກໍລະນີໃໝ່ພຽງແຖວດຽວ.
+- [`main.go`](../lesson01/cmd/greeter/main.go): `name := ""`, ແລ້ວ `name = os.Args[1]` ສະເພາະເມື່ອ `len(os.Args) > 1`. ຊື່ຫວ່າງຈະໄປໃຊ້ fallback stranger ຂອງ `Hello` ເອງ.
+
+**ຜົນລັບ**
+
+```text
+$ go run ./cmd/greeter Alice
+Hello, Alice!
+$ go run ./cmd/greeter
+Hello, stranger!
+
+$ go test -v ./...
+?       example.com/lesson01/cmd/greeter        [no test files]
+=== RUN   TestHello
+=== RUN   TestHello/normal_name
+=== RUN   TestHello/empty
+=== RUN   TestHello/whitespace_only
+=== RUN   TestHello/padded_name
+--- PASS: TestHello (0.00s)
+    --- PASS: TestHello/normal_name (0.00s)
+    --- PASS: TestHello/empty (0.00s)
+    --- PASS: TestHello/whitespace_only (0.00s)
+    --- PASS: TestHello/padded_name (0.00s)
+PASS
+ok      example.com/lesson01/internal/greet
+
+$ go test -run 'TestHello/empty' -v ./internal/greet
+=== RUN   TestHello
+=== RUN   TestHello/empty
+--- PASS: TestHello (0.00s)
+    --- PASS: TestHello/empty (0.00s)
+
+$ go test -cover ./...
+        example.com/lesson01/cmd/greeter                coverage: 0.0% of statements
+ok      example.com/lesson01/internal/greet     coverage: 100.0% of statements
+
+$ file bin/greeter-linux
+bin/greeter-linux: ELF 64-bit LSB executable, x86-64, statically linked, with debug_info, not stripped
+```
+
+- ຊ່ອງວ່າງໃນຊື່ subtest ກາຍເປັນ underscore (`normal name` → `normal_name`).
+- `-run 'TestHello/empty'` ຍັງ run `TestHello` ທີ່ເປັນແມ່, ແຕ່ run ພຽງກໍລະນີ `empty` ຢູ່ຂ້າງໃນ.
+- `cmd/greeter` ມີ coverage 0% ເປັນເລື່ອງປົກກະຕິ; `main` ບໍ່ມີ test.
+- `ELF` + `x86-64` = binary ຂອງ Linux amd64 (ຖ້າ build ໃຫ້ macOS ຈະເປັນ Mach-O arm64). ມັນ run ເທິງ Mac ບໍ່ໄດ້. `-ldflags="-s -w"` ຕັດ debug info ອອກເພື່ອໃຫ້ນ້ອຍລົງ.
+
+### ຄຳຖາມ 4: `os.Args`
+
+**`os.Args[0]`** ແມ່ນ path ທີ່ໃຊ້ເປີດໂປຣແກຣມ, ບໍ່ແມ່ນໄຟລ໌ source:
+
+```text
+$ go run ./cmd/greeter Alice
+os.Args = [/var/folders/.../go-build1410952333/b001/exe/greeter Alice]
+$ ./bin/greeter Alice
+os.Args = [./bin/greeter Alice]
+```
+
+`go run` compile ໄວ້ໃນໂຟນເດີຊົ່ວຄາວ ແລ້ວ run binary ຈາກບ່ອນນັ້ນ. ຢ່າເພິ່ງ `os.Args[0]`; ມັນຂຶ້ນກັບວ່າເປີດໂປຣແກຣມດ້ວຍວິທີໃດ. Argument ຂອງຜູ້ໃຊ້ເລີ່ມທີ່ `os.Args[1]`.
+
+**`os.Args[1]` ໂດຍບໍ່ກວດຄວາມຍາວ** compile ຜ່ານ ແຕ່ **panic ຕອນ runtime** ເມື່ອບໍ່ມີ argument:
+
+```text
+panic: runtime error: index out of range [1] with length 1
+
+goroutine 1 [running]:
+main.main()
+        .../lesson01/cmd/greeter/main.go:21 +0xb0
+exit status 2
+```
+
+`[1] with length 1`: ຂໍ index 1, ແຕ່ slice ມີພຽງ `os.Args[0]`. Stack trace ຊີ້ໄປແຖວທີ່ຜິດພໍດີ, ແລະ exit status 2 ໝາຍເຖິງ panic ທີ່ບໍ່ໄດ້ recover.
+
+**Node:** `process.argv[2]` ເມື່ອບໍ່ມີ argument ແມ່ນພຽງ `undefined`. ບໍ່ crash, ແລະ ຄ່າທີ່ຜິດນັ້ນຈະຖືກສົ່ງຕໍ່ໄປຈົນມີບ່ອນອື່ນພັງພາຍຫຼັງ, ໄກຈາກສາເຫດ. Go ລົ້ມເຫຼວທັນທີທີ່ແຖວນັ້ນພໍດີ, ສະນັ້ນໃຫ້ກວດ `len(...)` ກ່ອນເຂົ້າເຖິງ index ສະເໝີ.
+
+**ເປັນຫຍັງ Go ໃຊ້ `[1]` ແຕ່ Node ໃຊ້ `[2]`:** `node app.js Alice` ໄດ້ `[node path, script path, 'Alice']`, ເພາະ runtime ແລະ script ເປັນຄົນລະລາຍການ. Binary ຂອງ Go *ຄື* ໂປຣແກຣມເອງ, ສະນັ້ນມີພຽງລາຍການດຽວຢູ່ທາງໜ້າ. (ກັບ `node -e` ບໍ່ມີ script, ສະນັ້ນ `argv` ມີພຽງ path ຂອງ node.)
